@@ -8,6 +8,9 @@ At this stage no runners have been provisioned, or test environment created.
 - A text editor.
 - A can do attitude or something lame like that.
 
+## Branches
+Cut a new branche for each day of lessons. No lessons should modify the `main` branch, instead only a `feature`.
+
 ## Project Structure
 Project directories created from the project root are to be appropriately named, and contain at a minimum:
 - A README file containing lesson/s technical scope.
