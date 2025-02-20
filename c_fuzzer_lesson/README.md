@@ -15,7 +15,7 @@
 6. **Loop Task**: Understanding and implementing loops.        task5.md
 7. **Function Task**: Defining and using functions.            task6.md
 8. **Vuln Program Task**: Create a program to Fuzz.            task7.md
-
+9. **Fuzzer Task**: Run the Fuzzer against your program        task8.md
 
 ## Examples
 Examples of these tasks are provided in the task instructions, with exception to the vuln which can be found in `code\vulnerable.c`.
