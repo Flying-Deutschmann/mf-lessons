@@ -1,25 +1,29 @@
-## 2. IO Task
+## 3. Operator Task
 
-### Instructions:
-- This task requires you to get input from the user and display output based on that input.
-- Use scanf() to ask the user for their name and age, then output a greeting message using printf().
+## Instructions:
+- In this task, you'll work with arithmetic, relational, and logical operators.
+- Perform basic arithmetic operations (addition, multiplication) on two numbers.
+- Use relational operators to compare two numbers.
+- Use logical operators to evaluate conditions and combine them.
 
-### Example:
+## Example:
 ```
 #include <stdio.h>
 
 int main() {
-    char name[50];
-    int age;
+    int a = 10, b = 5;
 
-    // Input from the user
-    printf("Enter your name: ");
-    scanf("%s", name);
-    printf("Enter your age: ");
-    scanf("%d", &age);
+    // Arithmetic operators
+    int sum_result = a + b;
+    int product_result = a * b;
 
-    // Output the user input
-    printf("Hello, %s! You are %d years old.\n", name, age);
+    // Relational operator
+    int is_equal = (a == b);
+
+    // Logical operator
+    int is_true = (a > b) && (b > 0);
+
+    printf("Sum: %d, Product: %d, Is Equal: %d, Is True: %d\n", sum_result, product_result, is_equal, is_true);
     
     return 0;
 }
