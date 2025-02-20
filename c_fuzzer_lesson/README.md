@@ -18,12 +18,4 @@
 
 
 ## Examples
-Examples of these tasks can be found in the `code\` dir.
-1. vars.c
-2. io.c
-3. operators.c
-4. conditionals.c
-5. loops.c
-6. functions.c
-7. vunrable.c
-
+Examples of these tasks are provided in the task instructions, with exception to the vuln which can be found in `code\vulnerable.c`.
