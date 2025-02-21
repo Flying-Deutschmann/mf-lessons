@@ -5,12 +5,12 @@ WSL allows you to run a Linux environment directly on Windows, making it a great
 
 ## Install WSL (Windows Subsystem for Linux)
 Open PowerShell as an administrator and run the following command:
-```powershell
+```
 wsl --install
 ```
 Restart your machine if required.
-```powershell
-reboot
+```
+shutdown /r
 ```
 ## Setup WSL
 After restarting, choose a Linux distribution from the Microsoft Store (e.g., Ubuntu).
