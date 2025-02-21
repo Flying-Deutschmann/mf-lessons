@@ -47,3 +47,8 @@ int main(int argc, char *argv[]) {
 gcc -o vulnerable_program vulnerable.c
 ```
 
+## Run Executable (program)
+```
+./vulnreable_program
+```
+
