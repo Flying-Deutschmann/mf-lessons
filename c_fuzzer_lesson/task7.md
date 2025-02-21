@@ -41,3 +41,9 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 ```
+
+## Compile Program
+```
+gcc -o vulnerable_program vulnerable.c
+```
+
