@@ -3,7 +3,7 @@
 
 - winget enabled
 - git installed
-- gcc installed
+- wsl installed
 - notepad++ installed
   
 ## Tasks:
