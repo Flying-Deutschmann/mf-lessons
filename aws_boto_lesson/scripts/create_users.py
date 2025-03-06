@@ -1,4 +1,4 @@
- import boto3
+import boto3
 
 # Initialize the IAM client
 iam = boto3.client('iam')
