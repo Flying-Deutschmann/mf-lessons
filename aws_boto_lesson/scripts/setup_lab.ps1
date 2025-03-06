@@ -20,8 +20,11 @@ Invoke-WebRequest -Uri "https://github.com/git-for-windows/git/releases/download
 Start-Process "$env:TEMP\Git-2.33.0-64-bit.exe" -ArgumentList "/VERYSILENT", "/NORESTART" -Wait
 Remove-Item "$env:TEMP\Git-2.33.0-64-bit.exe" -Force
 
-# Function to install Git Bash (Git for Windows includes Git Bash)
-Write-Host "Git Bash should be installed with Git..."
+# Install Notepad++
+Write-Hose "Installing Notepad++"
+Invoke-WebRequest -Uri "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/latest/download/npp.x64.Installer.exe" -OutFile "$env:TEMP\npp-installer.exe"
+Start-Process "$env:TEMP\npp-installer.exe" -ArgumentList "/S" -Wait
+Remove-Item "$env:TEMP\npp-installer.exe" -Force
 
 # Verify installations
 Write-Host "Verifying AWS CLI installation..."
