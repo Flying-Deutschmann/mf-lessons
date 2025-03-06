@@ -50,11 +50,14 @@ def create_user(username):
         response = iam.create_user(UserName=username)
         print(f"User {username} created successfully.")
         
-        # Optionally, create an access key for the new user
+        # Create an access key for the new user
         create_access_key_response = iam.create_access_key(UserName=username)
-        print(f"Access key created for user {username}:")
-        print(f"Access Key ID: {create_access_key_response['AccessKey']['AccessKeyId']}")
-        print(f"Secret Access Key: {create_access_key_response['AccessKey']['SecretAccessKey']}")
+        access_key_id = create_access_key_response['AccessKey']['AccessKeyId']
+        secret_access_key = create_access_key_response['AccessKey']['SecretAccessKey']
+
+        # Print the access key details
+        print(f"Access Key ID: {access_key_id}")
+        print(f"Secret Access Key: {secret_access_key}")
 
     except Exception as e:
         print(f"Error creating user {username}: {e}")
@@ -93,11 +96,11 @@ if __name__ == '__main__':
     # First, create the policy (or retrieve its ARN if it already exists)
     policy_arn = create_policy()
 
-    # Loop through the users list and create each user
+    # Loop through the users list and create each user and their access keys
     for user_info in users:
         create_user(user_info["username"])
 
     # After all users are created, attach the policy to each user
     attach_policy_to_users(policy_arn)
 
-    print("Users created and policy attached successfully!")
+    print("Users created, access keys generated, and policy attached successfully!")
