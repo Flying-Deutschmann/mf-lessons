@@ -28,6 +28,15 @@ if ($gitUninstall) {
     Write-Host "Git not found."
 }
 
+Write-Host "Uninstalling Notepad++..."
+$notepadUninstall = Get-WmiObject -Query "SELECT * FROM Win32_Product WHERE Name LIKE '%Notepad++%'" | Select-Object Name
+if ($notepadUninstall) {
+    $notepadUninstall.Uninstall()
+    Write-Host "Notepad++ uninstalled successfully."
+} else {
+    Write-Host "Notepad not found."
+}
+
 # Function to check if Git Bash is still there
 Write-Host "Checking for Git Bash..."
 $gitBashPath = "C:\Program Files\Git\bin\bash.exe"
@@ -58,7 +67,7 @@ if ($env:VIRTUAL_ENV) {
 
 # Verify uninstallations
 Write-Host "Verifying AWS CLI uninstallation..."
-$awsCliCheck = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "AWS CLI*" }
+$awsCliCheck = Get-WmiObject -Query "SELECT * FROM Win32_Product WHERE Name LIKE '%Notepad++%'" | Select-Object Name
 if ($awsCliCheck) {
     Write-Host "AWS CLI is still installed."
 } else {
@@ -73,6 +82,15 @@ if ($pythonCheck) {
     Write-Host "Python 3 uninstalled successfully."
 }
 
+Write-Host "Verifying Notepad++ uninstallation..."
+$notepadCheck = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "Git*" }
+if ($notepadCheck) {
+    Write-Host "Notepad++ is still installed."
+} else {
+    Write-Host "Git uninstalled successfully."
+}
+Write-Host "Verifying Notepad++ uninstallation"
+
 Write-Host "Verifying Git uninstallation..."
 $gitCheck = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "Git*" }
 if ($gitCheck) {
@@ -80,5 +98,6 @@ if ($gitCheck) {
 } else {
     Write-Host "Git uninstalled successfully."
 }
+Write-Host "Verifying Git uninstallation"
 
 Write-Host "Uninstallation complete!"
