@@ -1,4 +1,5 @@
 import boto3
+from time import sleep
 
 # Initialize the IAM client
 iam = boto3.client('iam')
@@ -100,6 +101,7 @@ if __name__ == '__main__':
     for user_info in users:
         create_user(user_info["username"])
 
+    sleep(10)
     # After all users are created, attach the policy to each user
     attach_policy_to_users(policy_arn)
 
