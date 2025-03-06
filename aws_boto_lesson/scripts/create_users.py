@@ -1,5 +1,4 @@
-import boto3
-from time import sleep
+ import boto3
 
 # Initialize the IAM client
 iam = boto3.client('iam')
@@ -77,7 +76,7 @@ def create_policy():
     except iam.exceptions.EntityAlreadyExistsException:
         print(f"Policy {policy_name} already exists, skipping creation.")
         # If the policy exists, retrieve its ARN
-        policy_arn = f"arn:aws:iam::aws:policy/{policy_name}"
+        policy_arn = f"arn:aws:iam::{iam.get_user()['User']['Arn'].split(':')[4]}:policy/{policy_name}"
         return policy_arn
 
 def attach_policy_to_users(policy_arn):
@@ -101,7 +100,6 @@ if __name__ == '__main__':
     for user_info in users:
         create_user(user_info["username"])
 
-    sleep(10)
     # After all users are created, attach the policy to each user
     attach_policy_to_users(policy_arn)
 
