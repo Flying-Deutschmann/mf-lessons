@@ -4,7 +4,12 @@
 - python3.10+ install
 
 ## Setup Lab
-In an admin PS terminal enable remote signed scripts
+Enable PS Remoting to push file
+```powershell
+Enable-PSRemoting -ForceIn an admin PS terminal enable remote signed 
+```
+
+scripts
 ```powershell
 Set-ExecutionPolicy RemoteSigned
 ```
@@ -27,7 +32,11 @@ Install lab tools
 Examples of these tasks are provided in the task instructions, can be found in `code\`.
 
 ## Cleanup Lab
-Unnstall lab tools
+Uninstall lab tools
 ```powershell
 .\cleanup_lab.ps1
+```
+Disable PS remoting
+```powershell
+Disable-PSRemoting -Force
 ```
