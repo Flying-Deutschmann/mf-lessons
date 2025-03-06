@@ -15,6 +15,15 @@ users = [
     {"username": "user8"}
 ]
 
+# Loop through the user names and create each user
+for user_name in users:
+    try:
+        # Create the user
+        response = iam.create_user(UserName=user_name)
+        print(f"User {user_name} created successfully.")
+    except Exception as e:
+        print(f"Error creating user {user_name}: {e}")
+
 # Define the custom policy
 policy_name = "S3_EC2_Create_Policy"
 policy_document = {
