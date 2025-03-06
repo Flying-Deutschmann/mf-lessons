@@ -48,8 +48,9 @@ def remove_user_and_keys(user_info):
     except Exception as e:
         print(f"Error removing user {user_info['username']}: {e}")
 
-# Loop through each user and delete
-for user_info in users:
-    remove_user_and_keys(user_info)
-
-print("All specified users and associated resources have been removed.")
+if __name__ == '__main__':
+    # Loop through each user and delete
+    for user_info in users:
+        remove_user_and_keys(user_info)
+    
+    print("All specified users and associated resources have been removed.")
