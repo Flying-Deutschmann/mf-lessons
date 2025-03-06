@@ -1,75 +1,144 @@
-# **EC2 Instance Creation and SSH Access with Boto3**
+# **How to Set Up AWS Credentials for Boto3 and AWS CLI**
 
-This guide walks you through creating an **EC2 instance** using **Boto3**, the AWS SDK for Python, and then SSHing into that instance. It covers all the necessary steps, from launching the EC2 instance to connecting to it via SSH.
+This guide will show you how to create and configure the `~/.aws/credentials` file on your local machine to enable **Boto3** (AWS SDK for Python) and **AWS CLI** to interact with AWS services.
 
 ---
 
 ## **Prerequisites**
-Before you start, ensure you have the Virtal Environment for python setup and activated:
-- Firefox browser
-- Python3.10+
-- Boto3
-
+Before you proceed, ensure you have setup the python environment and installed the python dependancies.
 ```bash
-Firefox instruction_setup_venv.md
+msedge instruction_setup_venv.md
 ```
 
-2. **Key Pair**: You need an **EC2 key pair** (a `.pem` file) to SSH into the instance. You can create it during instance creation, or use an existing one.
-
-3. **SSH Client**:
-   - **Linux/Mac**: You can use the built-in terminal.
-   - **Windows-GitBash**: You can use the built-in terminal
-   - **Windows-PuTTY**: Install **PuTTY** if you’re using Windows (and convert the `.pem` file to `.ppk` format using PuTTYgen).
+**AWS Access Key & Secret Key**: To interact with AWS services programmatically, you need an **Access Key** and a **Secret Key**. These have been added as a text file to your computer `keys.txt`.
 
 ---
 
-## **Step 1: Python Script to Create an EC2 Instance**
+## **Step 1: Install the AWS CLI (Command Line Interface)**
 
-This script uses **Boto3** to launch an EC2 instance with a specified **AMI ID**, **instance type**, and **key pair name**.
+If you don't have the AWS CLI installed, you need to install it to configure your credentials.
 
-### **Python Script: `create_ec2_instance.py`**
+### **For Windows**:
+1. Download the latest version of the AWS CLI from the [Windows installation guide](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-windows.html).
+2. Follow the installation instructions.
+
+### **For macOS/Linux**:
+1. Download and install the AWS CLI using the instructions from the [CLI installation guide](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
+
+---
+
+## **Step 2: Configure AWS Credentials Using the AWS CLI**
+
+Once you have the AWS CLI installed, you can configure the AWS credentials by running the `aws configure` command.
+
+1. Open your terminal or command prompt.
+2. Run the following command to configure your AWS credentials:
+
+   ```bash
+   aws configure
+   ```
+
+3. You will be prompted to enter the following details:
+   - **AWS Access Key ID**: Enter your **Access Key ID** (generated in the AWS IAM console).
+   - **AWS Secret Access Key**: Enter your **Secret Access Key**.
+   - **Default region name**: Enter the default AWS region you want to work with (e.g., `us-west-2`, `us-east-1`).
+   - **Default output format**: Choose an output format (e.g., `json`, `text`, or `table`). You can use `json` as the default.
+
+   Example:
+   ```bash
+   AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
+   AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+   Default region name [None]: us-west-2
+   Default output format [None]: json
+   ```
+
+   This will create the `~/.aws/credentials` and `~/.aws/config` files in your system.
+
+---
+
+## **Step 3: Manually Editing the `~/.aws/credentials` File (Optional)**
+
+If you'd like to manually edit or verify the credentials, you can open the `~/.aws/credentials` file in a text editor.
+
+### **For Windows**:
+- The `credentials` file is typically located at:
+  ```
+  C:\Users\<YourUsername>\.aws\credentials
+  ```
+
+### **For macOS/Linux**:
+- The `credentials` file is usually located at:
+  ```
+  /home/<YourUsername>/.aws/credentials
+  ```
+  or
+  ```
+  /Users/<YourUsername>/.aws/credentials
+  ```
+
+### **Edit the `credentials` file**:
+Open the `credentials` file in a text editor and add your **Access Key ID** and **Secret Access Key**. The format of the file will look like this:
+
+```
+[default]
+aws_access_key_id = YOUR_ACCESS_KEY_ID
+aws_secret_access_key = YOUR_SECRET_ACCESS_KEY
+```
+
+For example:
+
+```
+[default]
+aws_access_key_id = AKIAIOSFODNN7EXAMPLE
+aws_secret_access_key = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+```
+
+You can also add multiple profiles in the same `credentials` file by adding sections with different profile names:
+
+```
+[default]
+aws_access_key_id = YOUR_ACCESS_KEY_ID
+aws_secret_access_key = YOUR_SECRET_ACCESS_KEY
+
+[profile_name]
+aws_access_key_id = ANOTHER_ACCESS_KEY_ID
+aws_secret_access_key = ANOTHER_SECRET_ACCESS_KEY
+```
+
+Replace `profile_name` with a custom profile name that you want to use.
+
+---
+
+## **Step 4: Verify Your Configuration**
+
+You can verify that the `~/.aws/credentials` file is properly configured by running a simple AWS CLI command or using **Boto3** in Python.
+
+### **Verify Using AWS CLI**:
+1. Open a terminal or command prompt.
+2. Run a simple AWS CLI command, such as listing your S3 buckets:
+
+   ```bash
+   aws s3 ls
+   ```
+
+   If everything is set up correctly, you should see a list of your S3 buckets.
+
+### **Verify Using Boto3 in Python**:
+You can also verify the configuration by running a Boto3 script in Python. Here’s an example to list your S3 buckets:
 
 ```python
 import boto3
 
-# Initialize a session using Boto3 EC2 resource
-ec2 = boto3.resource('ec2')
+# Initialize the S3 client
+s3 = boto3.client('s3')
 
-# Create a new EC2 instance
-instance = ec2.create_instances(
-    ImageId='ami-12345678',  # Replace with a valid AMI ID (e.g., Amazon Linux 2 AMI)
-    MinCount=1,              # Minimum number of instances to launch
-    MaxCount=1,              # Maximum number of instances to launch
-    InstanceType='t2.micro', # Type of the instance (t2.micro is eligible for the free tier)
-    KeyName='your-key-pair'  # Replace with your SSH key pair name
-)
+# List S3 buckets
+response = s3.list_buckets()
 
-# Print the ID of the created instance
-print("Created instance:", instance[0].id)
-
-# Retrieve the public IP address
-public_ip = instance.public_ip_address
-
-# Print the public IP address
-print("Public IP address of the EC2 instance:", public_ip)
+# Print out the bucket names
+print('S3 Buckets:')
+for bucket in response['Buckets']:
+    print(f'- {bucket["Name"]}')
 ```
 
-### **Explanation**:
-- `ImageId`: Specify the AMI ID to use for the instance. For Amazon Linux 2, you can find the ID by searching for Amazon Linux 2 in the AWS EC2 AMI list.
-- `MinCount` and `MaxCount`: These are set to `1`, meaning we want to create a single instance.
-- `InstanceType`: We're using `t2.micro`, which is eligible for the **AWS Free Tier**.
-- `KeyName`: This is the name of the **SSH key pair** that you’ll use to access the instance.
-
-### **Steps to Run the Script**:
-1. Save the script as `create_ec2_instance.py`.
-2. In your terminal, navigate to the directory where the script is saved.
-3. Run the script:
-   ```bash
-   python create_ec2_instance.py
-   ```
-
-4. Once the script runs successfully, it will print the **instance ID** of the newly created EC2 instance.
-
-## **Conclusion**
-
-This script allows you to quickly create EC2 instances on AWS using the Boto3 library. It's an easy way to automate instance creation and interact with your AWS resources programmatically.
+Run the script, and if everything is configured correctly, you should see the names of the S3 test bucket printed.
