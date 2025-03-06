@@ -57,11 +57,10 @@ def create_user(username):
         print(f"Secret Access Key: {create_access_key_response['AccessKey']['SecretAccessKey']}")
 
     except Exception as e:
-        print(f"Error creating user {username}: {e}")# List of users to create
-
+        print(f"Error creating user {username}: {e}")
     return 0
 
-def attach_policy(username):
+def create_policy():
     # Create the policy
     try:
         print(f"Creating policy: {policy_name}...")
@@ -70,35 +69,35 @@ def attach_policy(username):
             PolicyDocument=str(policy_document).replace("'", "\"")  # Convert to JSON string
         )
         print(f"Policy created successfully with ARN: {create_policy_response['Policy']['Arn']}")
+        return create_policy_response['Policy']['Arn']
     except iam.exceptions.EntityAlreadyExistsException:
         print(f"Policy {policy_name} already exists, skipping creation.")
+        # If the policy exists, retrieve its ARN
         policy_arn = f"arn:aws:iam::aws:policy/{policy_name}"
+        return policy_arn
 
-    return 0
-    
-    
-if __name__ == '__main__':
-    # Loop through the user names and create each user
-    for user_name in users:
-        try:
-            # Create the user
-            response = iam.create_user(user_info["username"])
-            print(f"User {user_name} created successfully.")
-        except Exception as e:
-            print(f"Error creating user {user_name}: {e}")
-
+def attach_policy_to_users(policy_arn):
     # Attach the policy to each user
     for user_info in users:
         try:
             print(f"Attaching policy to user: {user_info['username']}...")
             iam.attach_user_policy(
                 UserName=user_info['username'],
-                PolicyArn=create_policy_response['Policy']['Arn']
+                PolicyArn=policy_arn
             )
             print(f"Policy attached to {user_info['username']} successfully.")
         except Exception as e:
             print(f"Error attaching policy to {user_info['username']}: {e}")
-    
-    print("Users created and policy attached successfully!")
 
-    
+if __name__ == '__main__':
+    # First, create the policy (or retrieve its ARN if it already exists)
+    policy_arn = create_policy()
+
+    # Loop through the users list and create each user
+    for user_info in users:
+        create_user(user_info["username"])
+
+    # After all users are created, attach the policy to each user
+    attach_policy_to_users(policy_arn)
+
+    print("Users created and policy attached successfully!")
